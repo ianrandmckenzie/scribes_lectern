@@ -1,0 +1,11 @@
+{
+  "Duration": 0.5,
+  "ApplicationEffects": {
+    "Particles": [
+      {
+        "SystemId": "Potion_Stamina_Burst"
+      }
+    ],
+    "WorldSoundEventId": "SFX_Potion_Drink_Success"
+  }
+}

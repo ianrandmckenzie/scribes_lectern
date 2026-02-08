@@ -1,0 +1,13 @@
+{
+  "Group": "relentlessCurious",
+  "Name": "Scrolls",
+  "Version": "0.1.0",
+  "Description": "Scrolls mod plugin scaffold",
+  "ServerVersion": "*",
+  "Dependencies": {
+    "Hytale:EntityModule": "*",
+    "Hytale:InteractionModule": "*"
+  },
+  "Main": "com.relentlesscurious.hytale.plugins.scrolls.ScrollsPlugin",
+  "IncludesAssetPack": true
+}

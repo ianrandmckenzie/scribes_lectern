@@ -1,0 +1,35 @@
+# Build artifacts
+target/
+dependency-reduced-pom.xml
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.github/copilot-instructions*
+
+# Maven
+.mvn/
+mvn.cmd
+
+# Environment variables
+.env
+
+# Logs
+tmp/
+*.log
+
+# Compiled classes (should be rebuilt)
+all_classes/
+com/
+
+# Server files (don't commit server binaries)
+*.jar
+!pom.xml
+
+# Temporary directories
+tmp/
+
+# OS-specific
+Thumbs.db

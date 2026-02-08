@@ -1,0 +1,59 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Scroll_Spawn.name",
+    "Description": "server.items.Scroll_Spawn.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Deco_Scroll.png",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Tree_Sap",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Workbench",
+        "Categories": [
+          "Workbench_Survival"
+        ]
+      }
+    ]
+  },
+  "Interactions": {
+    "Primary": "Scroll_Spawn_Charge"
+  },
+  "Tool": {},
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 16,
+  "IconProperties": {
+    "Scale": 0.735,
+    "Translation": [
+      0,
+      -7.495
+    ],
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Scrolls"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

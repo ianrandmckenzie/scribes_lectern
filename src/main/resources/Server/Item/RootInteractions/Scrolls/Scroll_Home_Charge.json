@@ -1,0 +1,33 @@
+{
+  "Interactions": [
+    {
+      "Type": "Charging",
+      "FailOnDamage": true,
+      "Effects": {
+        "ItemAnimationId": "Consume",
+        "ClearAnimationOnFinish": true,
+        "ClearSoundEventOnFinish": true
+      },
+      "HorizontalSpeedMultiplier": 0.4,
+      "Next": {
+        "5.0": {
+          "Type": "Serial",
+          "Interactions": [
+            {
+              "Type": "Simple",
+              "Effects": {
+                "LocalSoundEventId": "SFX_Potion_Drink_Success",
+                "Particles": [
+                  {
+                    "SystemId": "Potion_Stamina_Burst"
+                  }
+                ]
+              }
+            },
+            "Scroll_Home_Use"
+          ]
+        }
+      }
+    }
+  ]
+}

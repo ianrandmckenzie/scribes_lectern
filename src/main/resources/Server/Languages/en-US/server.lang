@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Scroll of Random Teleport
+items.Scroll_Random_Teleport.description = Teleports you to a carefully chosen random landing spot.
+
+items.Scroll_Spawn.name = Scroll of Spawn Teleport
+items.Scroll_Spawn.description = Teleports you to spawn.
+
+items.Scroll_Home.name = Scroll of Home Teleport
+items.Scroll_Home.description = Teleports you to your home, set by the Scroll of Home Binding.
+
+items.Scroll_Home_Binding.name = Scroll of Home Binding
+items.Scroll_Home_Binding.description = Use this scroll to set where your Scroll of Home Teleport takes you.
