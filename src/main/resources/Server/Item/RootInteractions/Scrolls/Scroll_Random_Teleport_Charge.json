@@ -4,7 +4,7 @@
       "Type": "Charging",
       "FailOnDamage": true,
       "Effects": {
-        "ItemAnimationId": "Consume",
+        "ItemAnimationId": "Read",
         "ClearAnimationOnFinish": true,
         "ClearSoundEventOnFinish": true
       },
