@@ -3,7 +3,7 @@
     "Name": "server.items.Scroll_Random_Teleport.name",
     "Description": "server.items.Scroll_Random_Teleport.description"
   },
-  "Icon": "Icons/ItemsGenerated/Deco_Scroll.png",
+  "Icon": "Icons/ItemsGenerated/icon_ScrollRandomTeleport.png",
   "Categories": [
     "Items.Tools"
   ],
@@ -36,6 +36,16 @@
     "Primary": "Scroll_Random_Teleport_Charge"
   },
   "Tool": {},
+  "BlockType": {
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/ScribesScroll.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Miscellaneous/ScrollRandomTeleport.png",
+        "Weight": 1
+      }
+    ]
+  },
   "PlayerAnimationsId": "Item",
   "MaxStack": 16,
   "IconProperties": {

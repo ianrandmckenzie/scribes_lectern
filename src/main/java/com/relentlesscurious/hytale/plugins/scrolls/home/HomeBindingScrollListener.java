@@ -1,4 +1,4 @@
-package dev.g9g.hytale.plugins.scrolls.home;
+package com.relentlesscurious.hytale.plugins.scrolls.home;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -14,9 +14,9 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
-import dev.g9g.hytale.plugins.scrolls.data.HomeStorage;
-import dev.g9g.hytale.plugins.scrolls.data.PlayerHomeData;
-import dev.g9g.hytale.plugins.scrolls.data.StoredLocation;
+import com.relentlesscurious.hytale.plugins.scrolls.data.HomeStorage;
+import com.relentlesscurious.hytale.plugins.scrolls.data.PlayerHomeData;
+import com.relentlesscurious.hytale.plugins.scrolls.data.StoredLocation;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.universe.world.World;

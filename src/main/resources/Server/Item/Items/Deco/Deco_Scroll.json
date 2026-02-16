@@ -34,7 +34,7 @@
   "BlockType": {
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/Miscellaneous/Scrolls.blockymodel",
+    "CustomModel": "Blocks/Miscellaneous/ScribesScroll.blockymodel",
     "CustomModelTexture": [
       {
         "Texture": "Blocks/Miscellaneous/Scrolls_Texture.png",

@@ -1,4 +1,4 @@
-package dev.g9g.hytale.plugins.scrolls.home;
+package com.relentlesscurious.hytale.plugins.scrolls.home;
 
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -29,16 +29,19 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
+import com.relentlesscurious.hytale.plugins.scrolls.data.HomeStorage;
+import com.relentlesscurious.hytale.plugins.scrolls.data.PlayerHomeData;
+import com.relentlesscurious.hytale.plugins.scrolls.data.StoredLocation;
 
-public class SpawnScrollListener {
+public class HomeScrollListener {
 
-  private static final String SCROLL_SPAWN_ITEM_ID = "Scroll_Spawn";
+  private static final String SCROLL_HOME_ITEM_ID = "Scroll_Home";
 
-  private final HomeTeleportService homeTeleportService;
+  private final HomeStorage homeStorage;
   private final HytaleLogger logger;
 
-  public SpawnScrollListener(HomeTeleportService homeTeleportService, HytaleLogger logger) {
-    this.homeTeleportService = homeTeleportService;
+  public HomeScrollListener(HomeStorage homeStorage, HytaleLogger logger) {
+    this.homeStorage = homeStorage;
     this.logger = logger;
   }
 
@@ -92,7 +95,7 @@ public class SpawnScrollListener {
       return;
     }
 
-    if (!SCROLL_SPAWN_ITEM_ID.equalsIgnoreCase(itemId)) {
+    if (!SCROLL_HOME_ITEM_ID.equalsIgnoreCase(itemId)) {
       return;
     }
 
@@ -151,45 +154,42 @@ public class SpawnScrollListener {
 
   private void handleUse(Player player) {
     if (player == null) {
-      logger.atWarning().log("Spawn scroll handleUse called with null player.");
+      logger.atWarning().log("Home scroll handleUse called with null player.");
       return;
     }
 
     String playerName = resolvePlayerName(player);
     World world = player.getWorld();
     if (world == null) {
-      logger.atWarning().log("Spawn scroll used by %s but player has no world.", playerName);
+      logger.atWarning().log("Home scroll used by %s but player has no world.", playerName);
       return;
     }
 
     logger.atInfo().log(
-        "Spawn scroll use start: player=%s world=%s",
+        "Home scroll use start: player=%s world=%s",
         playerName,
         world.getName());
 
-    HomeLocation spawnLocation = resolveSpawnLocation(player, world);
+    java.util.UUID uuid = resolvePlayerUuid(player);
+    PlayerHomeData homeData = homeStorage.getPlayerHomeData(uuid);
+    StoredLocation home = homeData.getHome("home");
 
-    logger.atInfo().log(
-        "Spawn scroll locations for %s: spawn=%s",
-        playerName,
-        spawnLocation);
-
-    HomeTeleportResult result = homeTeleportService.resolveTarget(
-        new HomeTeleportRequest(playerName, null, spawnLocation));
-
-    if (result.targetType() == HomeTeleportTargetType.NONE || result.targetLocation() == null) {
-      logger.atWarning().log("Home scroll could not resolve target for %s.", playerName);
+    if (home == null) {
+      // Fallback to "bed" logic if no home set? Or just fail?
+      // Let's fallback to bed for "Vanilla" feel if no custom home
+      handleVanillaFallback(player, world, null);
       return;
     }
 
+    HomeLocation target = new HomeLocation(home.getWorldName(), home.getX(), home.getY(), home.getZ());
+
     logger.atInfo().log(
-        "Home scroll target resolved for %s: %s -> %s",
+        "Home scroll target resolved for %s: HOME -> %s",
         playerName,
-        result.targetType(),
-        result.targetLocation());
+        target);
 
     playEffect(player);
-    queueTeleport(player, world, result.targetLocation(), null);
+    queueTeleport(player, world, target, null);
   }
 
   private void playEffect(Player player) {
@@ -237,44 +237,65 @@ public class SpawnScrollListener {
 
   private void handleUse(Player player, CommandBuffer<EntityStore> commandBuffer) {
     if (player == null) {
-      logger.atWarning().log("Spawn scroll handleUse called with null player.");
+      logger.atWarning().log("Home scroll handleUse called with null player.");
       return;
     }
 
     String playerName = resolvePlayerName(player);
     World world = player.getWorld();
     if (world == null) {
-      logger.atWarning().log("Spawn scroll used by %s but player has no world.", playerName);
+      logger.atWarning().log("Home scroll used by %s but player has no world.", playerName);
       return;
     }
 
     logger.atInfo().log(
-        "Spawn scroll use start: player=%s world=%s",
+        "Home scroll use start: player=%s world=%s",
         playerName,
         world.getName());
 
-    HomeLocation spawnLocation = resolveSpawnLocation(player, world);
+    java.util.UUID uuid = resolvePlayerUuid(player);
+    PlayerHomeData homeData = homeStorage.getPlayerHomeData(uuid);
+    StoredLocation home = homeData.getHome("home");
+
+    if (home == null) {
+      handleVanillaFallback(player, world, commandBuffer);
+      return;
+    }
+
+    HomeLocation target = new HomeLocation(home.getWorldName(), home.getX(), home.getY(), home.getZ());
 
     logger.atInfo().log(
-        "Spawn scroll locations for %s: spawn=%s",
+        "Home scroll target resolved for %s: HOME -> %s",
         playerName,
-        spawnLocation);
+        target);
 
-    HomeTeleportResult result = homeTeleportService.resolveTarget(
-        new HomeTeleportRequest(playerName, null, spawnLocation));
+    queueTeleport(player, world, target, commandBuffer);
+  }
 
-    if (result.targetType() == HomeTeleportTargetType.NONE || result.targetLocation() == null) {
-      logger.atWarning().log("Home scroll could not resolve target for %s.", playerName);
+  private void handleVanillaFallback(Player player, World world, CommandBuffer<EntityStore> commandBuffer) {
+    String playerName = resolvePlayerName(player);
+    HomeLocation bedLocation = resolveBedLocation(player, world);
+
+    HomeLocation target = bedLocation;
+    String type = "BED";
+
+    if (target == null) {
+      target = resolveSpawnLocation(player, world);
+      type = "SPAWN";
+    }
+
+    if (target == null) {
+      logger.atWarning().log("Home scroll fallback could not resolve target for %s.", playerName);
       return;
     }
 
     logger.atInfo().log(
         "Home scroll target resolved for %s: %s -> %s",
         playerName,
-        result.targetType(),
-        result.targetLocation());
+        type,
+        target);
 
-    queueTeleport(player, world, result.targetLocation(), commandBuffer);
+    queueTeleport(player, world, target, commandBuffer);
   }
 
   private boolean isScrollInteraction(PlayerMouseButtonEvent event) {
@@ -288,7 +309,7 @@ public class SpawnScrollListener {
     }
 
     String itemId = resolveItemId(item);
-    return SCROLL_SPAWN_ITEM_ID.equalsIgnoreCase(itemId);
+    return SCROLL_HOME_ITEM_ID.equalsIgnoreCase(itemId);
   }
 
   private boolean isLeftClick(MouseButtonEvent mouseButtonEvent) {

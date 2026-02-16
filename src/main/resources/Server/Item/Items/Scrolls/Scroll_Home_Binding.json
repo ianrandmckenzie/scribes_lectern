@@ -3,7 +3,7 @@
     "Name": "server.items.Scroll_Home_Binding.name",
     "Description": "server.items.Scroll_Home_Binding.description"
   },
-  "Icon": "Icons/ItemsGenerated/Deco_Scroll.png",
+  "Icon": "Icons/ItemsGenerated/icon_ScrollHomeBinding.png",
   "Categories": [
     "Items.Tools"
   ],
@@ -36,6 +36,16 @@
     "Primary": "Scroll_Home_Binding_Charge"
   },
   "Tool": {},
+  "BlockType": {
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/ScribesScroll.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Miscellaneous/ScrollHomeBinding.png",
+        "Weight": 1
+      }
+    ]
+  },
   "PlayerAnimationsId": "Item",
   "MaxStack": 16,
   "IconProperties": {
