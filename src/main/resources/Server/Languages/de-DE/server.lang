@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Spruchrolle des zufälligen Teleports
+items.Scroll_Random_Teleport.description = Teleportiert dich an einen sorgfältig ausgewählten zufälligen Landeplatz.
+
+items.Scroll_Spawn.name = Spruchrolle des Spawn-Teleports
+items.Scroll_Spawn.description = Teleportiert dich zum Spawn.
+
+items.Scroll_Home.name = Spruchrolle des Heim-Teleports
+items.Scroll_Home.description = Teleportiert dich nach Hause, festgelegt durch die Spruchrolle der Heimanbindung.
+
+items.Scroll_Home_Binding.name = Spruchrolle der Heimanbindung
+items.Scroll_Home_Binding.description = Benutze diese Spruchrolle, um festzulegen, wohin dich deine Spruchrolle des Heim-Teleports bringt.

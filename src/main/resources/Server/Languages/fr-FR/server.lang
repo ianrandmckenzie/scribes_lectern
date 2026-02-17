@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Parchemin de Téléportation Aléatoire
+items.Scroll_Random_Teleport.description = Vous téléporte vers un point d'atterrissage aléatoire soigneusement choisi.
+
+items.Scroll_Spawn.name = Parchemin de Téléportation au Point d'Apparition
+items.Scroll_Spawn.description = Vous téléporte au point d'apparition.
+
+items.Scroll_Home.name = Parchemin de Téléportation à la Maison
+items.Scroll_Home.description = Vous téléporte à votre domicile, défini par le Parchemin de Liaison à la Maison.
+
+items.Scroll_Home_Binding.name = Parchemin de Liaison à la Maison
+items.Scroll_Home_Binding.description = Utilisez ce parchemin pour définir l'endroit où votre Parchemin de Téléportation à la Maison vous emmène.

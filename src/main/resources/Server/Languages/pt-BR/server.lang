@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Pergaminho de Teletransporte Aleatório
+items.Scroll_Random_Teleport.description = Teletransporta você para um local de pouso aleatório cuidadosamente escolhido.
+
+items.Scroll_Spawn.name = Pergaminho de Teletransporte para o Renascimento
+items.Scroll_Spawn.description = Teletransporta você para o ponto de renascimento.
+
+items.Scroll_Home.name = Pergaminho de Teletransporte para Casa
+items.Scroll_Home.description = Teletransporta você para sua casa, definida pelo Pergaminho de Vinculação de Casa.
+
+items.Scroll_Home_Binding.name = Pergaminho de Vinculação de Casa
+items.Scroll_Home_Binding.description = Use este pergaminho para definir para onde o seu Pergaminho de Teletransporte para Casa levará você.

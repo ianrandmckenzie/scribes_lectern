@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Pergamino de Teletransporte Aleatorio
+items.Scroll_Random_Teleport.description = Te teletransporta a un punto de aterrizaje aleatorio cuidadosamente seleccionado.
+
+items.Scroll_Spawn.name = Pergamino de Teletransporte al Punto de Aparición
+items.Scroll_Spawn.description = Te teletransporta al punto de aparición.
+
+items.Scroll_Home.name = Pergamino de Teletransporte al Hogar
+items.Scroll_Home.description = Te teletransporta a tu hogar, configurado por el Pergamino de Vinculación al Hogar.
+
+items.Scroll_Home_Binding.name = Pergamino de Vinculación al Hogar
+items.Scroll_Home_Binding.description = Usa este pergamino para establecer a dónde te lleva tu Pergamino de Teletransporte al Hogar.

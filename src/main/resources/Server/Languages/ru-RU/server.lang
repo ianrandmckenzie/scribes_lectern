@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = Свиток случайной телепортации
+items.Scroll_Random_Teleport.description = Телепортирует вас в тщательно выбранное случайное место.
+
+items.Scroll_Spawn.name = Свиток телепортации на спавн
+items.Scroll_Spawn.description = Телепортирует вас на точку спавна.
+
+items.Scroll_Home.name = Свиток телепортации домой
+items.Scroll_Home.description = Телепортирует вас домой, установленный Свитком привязки к дому.
+
+items.Scroll_Home_Binding.name = Свиток привязки к дому
+items.Scroll_Home_Binding.description = Используйте этот свиток, чтобы установить место, куда вас перенесет Свиток телепортации домой.

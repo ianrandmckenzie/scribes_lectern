@@ -1,9 +1,9 @@
 {
   "Group": "relentlessCurious",
   "Name": "Scrolls",
-  "Version": "0.1.0",
+  "Version": "0.1.1",
   "Description": "Scrolls mod plugin scaffold",
-  "ServerVersion": "*",
+  "ServerVersion": "2026.02.17-255364b8e",
   "Dependencies": {
     "Hytale:EntityModule": "*",
     "Hytale:InteractionModule": "*"

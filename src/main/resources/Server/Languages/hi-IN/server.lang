@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = यादृच्छिक टेलीपोर्ट का स्क्रॉल
+items.Scroll_Random_Teleport.description = आपको सावधानी से चुने गए यादृच्छिक लैंडिंग स्थान पर टेलीपोर्ट करता है।
+
+items.Scroll_Spawn.name = स्पॉन टेलीपोर्ट का स्क्रॉल
+items.Scroll_Spawn.description = आपको स्पॉन पर टेलीपोर्ट करता है।
+
+items.Scroll_Home.name = होम टेलीपोर्ट का स्क्रॉल
+items.Scroll_Home.description = आपको आपके घर पर टेलीपोर्ट करता है, जो होम बाइंडिंग के स्क्रॉल द्वारा सेट किया गया है।
+
+items.Scroll_Home_Binding.name = होम बाइंडिंग का स्क्रॉल
+items.Scroll_Home_Binding.description = अपने होम टेलीपोर्ट के स्क्रॉल को यह बताने के लिए इस स्क्रॉल का उपयोग करें कि वह आपको कहाँ ले जाए।

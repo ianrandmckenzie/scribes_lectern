@@ -1,0 +1,11 @@
+items.Scroll_Random_Teleport.name = مخطوطة الانتقال العشوائي
+items.Scroll_Random_Teleport.description = تنقلك إلى نقطة هبوط عشوائية مختارة بعناية.
+
+items.Scroll_Spawn.name = مخطوطة الانتقال إلى نقطة البداية
+items.Scroll_Spawn.description = تنقلك إلى نقطة البداية (Spawn).
+
+items.Scroll_Home.name = مخطوطة الانتقال إلى المنزل
+items.Scroll_Home.description = تنقلك إلى منزلك، الذي تم تحديده بواسطة مخطوطة ربط المنزل.
+
+items.Scroll_Home_Binding.name = مخطوطة ربط المنزل
+items.Scroll_Home_Binding.description = استخدم هذه المخطوطة لتحديد المكان الذي ستأخذك إليه مخطوطة الانتقال إلى المنزل.
