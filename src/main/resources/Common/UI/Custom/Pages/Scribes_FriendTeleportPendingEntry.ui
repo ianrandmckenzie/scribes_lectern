@@ -11,7 +11,7 @@ Group {
     }
 
     Button #AcceptButton {
-        Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
+        Background: (TexturePath: "scribe_button.png", Border: 10);
         Anchor: (Width: 90, Height: 40, Vertical: 0);
         Padding: (Right: 5);
 
@@ -23,7 +23,7 @@ Group {
     }
 
     Button #DenyButton {
-        Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
+        Background: (TexturePath: "scribe_button.png", Border: 10);
         Anchor: (Width: 80, Height: 40, Vertical: 0);
 
         Label {

@@ -1,5 +1,5 @@
 Button #ActionButton {
-    Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
+    Background: (TexturePath: "scribe_button.png", Border: 10);
     LayoutMode: Left;
     Anchor: (Left: 0, Right: 0, Height: 50);
     Padding: (Left: 10, Right: 10, Top: 2, Bottom: 2);

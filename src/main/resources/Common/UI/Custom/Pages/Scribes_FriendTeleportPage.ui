@@ -1,6 +1,6 @@
 Group {
     Group {
-        Background: (TexturePath: "Pages/scribe_scrollbg.png");
+        Background: (TexturePath: "scribe_scrollbg.png");
         Anchor: (Width: 500, Height: 400);
 
         Group #Title {
@@ -29,7 +29,7 @@ Group {
             Padding: (Left: 10, Right: 10, Top: 5, Bottom: 5);
 
             Button #CancelButton {
-                Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
+                Background: (TexturePath: "scribe_button.png", Border: 10);
                 Anchor: (Width: 120, Height: 40, Horizontal: 0, Vertical: 0);
 
                 Label {
