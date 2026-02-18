@@ -90,7 +90,11 @@ fi
 # 6. Asset Deployment (Sync directory to ensure AssetModule picks it up)
 echo "Deploying assets to $SERVER_IP..."
 ssh "$SERVER_USER@$SERVER_IP" "mkdir -p ${REMOTE_PATH}scribes_lectern"
-scp -r src/main/resources/* "$SERVER_USER@$SERVER_IP:${REMOTE_PATH}scribes_lectern/"
+
+# Use rsync to respect .gitignore and efficiently sync assets
+# This ensures OS-specific files like .DS_Store aren't deployed
+rsync -avz --exclude-from='.gitignore' src/main/resources/ "$SERVER_USER@$SERVER_IP:${REMOTE_PATH}scribes_lectern/"
+
 if [ $? -ne 0 ]; then
     echo -e "${RED}Asset deployment failed!${NC}"
 fi
