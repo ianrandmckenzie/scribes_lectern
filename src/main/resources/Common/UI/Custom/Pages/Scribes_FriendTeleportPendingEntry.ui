@@ -1,8 +1,8 @@
 Group {
     Background: #2a3a2a;
     LayoutMode: Left;
-    Anchor: (Left: 0, Right: 0, Height: 60, Bottom: 2);
-    Padding: (Left: 10, Right: 10);
+    Anchor: (Left: 0, Right: 0, Height: 60);
+    Padding: (Left: 10, Right: 10, Top: 2, Bottom: 2);
 
     Label #RequesterName {
         Text: "Player Name";
@@ -11,21 +11,24 @@ Group {
     }
 
     Button #AcceptButton {
-        Background: #226622;
+        Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
         Anchor: (Width: 90, Height: 40, Vertical: 0);
+        Padding: (Right: 5);
 
         Label {
             Text: "Accept";
+            Style: (TextColor: #00FF00);
             Anchor: (Left: 0, Right: 0, Vertical: 0);
         }
     }
 
     Button #DenyButton {
-        Background: #662222;
+        Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
         Anchor: (Width: 80, Height: 40, Vertical: 0);
 
         Label {
             Text: "Ignore";
+            Style: (TextColor: #FF0000);
             Anchor: (Left: 0, Right: 0, Vertical: 0);
         }
     }

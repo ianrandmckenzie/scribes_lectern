@@ -10,7 +10,7 @@ public class ReflectPlayer {
      */
     public static String resolveName(Player player) {
         if (player == null) return "Unknown";
-        
+
         // Strategy 1: Direct Method Checks
         String[] methodNames = {"getName", "getDisplayName", "getUsername"};
         for (String methodName : methodNames) {
@@ -33,10 +33,10 @@ public class ReflectPlayer {
         // Strategy 3: Sanitized toString (last resort)
         try {
             String raw = player.toString();
-            // If it's a raw Hytale object string like Player{uuid=...}, 
+            // If it's a raw Hytale object string like Player{uuid=...},
             // the name isn't here, so we return a generic but clean label.
             if (raw.contains("uuid=") || raw.contains("@")) {
-                return "Player"; 
+                return "Player";
             }
             return raw;
         } catch (Exception e) {

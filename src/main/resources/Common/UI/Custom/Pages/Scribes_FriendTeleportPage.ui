@@ -1,6 +1,6 @@
 Group {
     Group {
-        Background: #00000088;
+        Background: (TexturePath: "Pages/scribe_scrollbg.png");
         Anchor: (Width: 500, Height: 400);
 
         Group #Title {
@@ -19,6 +19,7 @@ Group {
                 Padding: (Left: 10, Right: 10, Top: 10);
 
                 Group #PlayerCards {
+                    LayoutMode: Top;
                 }
             }
         }
@@ -28,8 +29,8 @@ Group {
             Padding: (Left: 10, Right: 10, Top: 5, Bottom: 5);
 
             Button #CancelButton {
-                Background: #882222;
-                Anchor: (Width: 120, Height: 40);
+                Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
+                Anchor: (Width: 120, Height: 40, Horizontal: 0, Vertical: 0);
 
                 Label {
                     Text: "Cancel";

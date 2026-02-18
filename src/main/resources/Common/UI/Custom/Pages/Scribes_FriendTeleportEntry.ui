@@ -1,8 +1,8 @@
 Button #ActionButton {
-    Background: #333333;
+    Background: (TexturePath: "Pages/scribe_button.png", Border: 10);
     LayoutMode: Left;
-    Anchor: (Left: 0, Right: 0, Height: 50, Bottom: 2);
-    Padding: (Left: 10, Right: 10);
+    Anchor: (Left: 0, Right: 0, Height: 50);
+    Padding: (Left: 10, Right: 10, Top: 2, Bottom: 2);
 
     Label #PlayerName {
         Text: "Player Name";
