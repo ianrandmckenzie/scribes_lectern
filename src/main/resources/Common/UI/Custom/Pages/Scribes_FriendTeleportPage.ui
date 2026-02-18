@@ -1,0 +1,42 @@
+Group {
+    Group {
+        Background: #00000088;
+        Anchor: (Width: 500, Height: 400);
+
+        Group #Title {
+            Anchor: (Left: 0, Right: 0, Top: 0, Height: 60);
+            Label {
+                Text: "Friend Teleport";
+                Anchor: (Left: 20, Top: 15, Bottom: 0);
+            }
+        }
+
+        Group #Content {
+            Anchor: (Top: 60, Left: 0, Right: 0, Bottom: 50);
+
+            Group #PlayerList {
+                FlexWeight: 1;
+                Padding: (Left: 10, Right: 10, Top: 10);
+
+                Group #PlayerCards {
+                }
+            }
+        }
+
+        Group #Footer {
+            Anchor: (Left: 0, Right: 0, Bottom: 0, Height: 50);
+            Padding: (Left: 10, Right: 10, Top: 5, Bottom: 5);
+
+            Button #CancelButton {
+                Background: #882222;
+                Anchor: (Width: 120, Height: 40);
+
+                Label {
+                    Text: "Cancel";
+                    Anchor: (Left: 0, Right: 0, Vertical: 0);
+                }
+            }
+        }
+    }
+}
+

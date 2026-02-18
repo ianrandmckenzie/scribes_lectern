@@ -1,0 +1,51 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Scroll_Friend_Teleport.name",
+    "Description": "server.items.Scroll_Friend_Teleport.description"
+  },
+  "Icon": "Icons/ItemsGenerated/icon_ScrollRandomTeleport.png",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Tree_Sap",
+        "Quantity": 2
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Workbench",
+        "Categories": [
+          "Workbench_Survival"
+        ]
+      }
+    ]
+  },
+  "Interactions": {
+    "Primary": "Scroll_Friend_Teleport_Charge"
+  },
+  "Tool": {},
+  "BlockType": {
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/ScribesScroll.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Miscellaneous/ScrollRandomTeleport.png",
+        "Weight": 1
+      }
+    ]
+  },
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 16
+}

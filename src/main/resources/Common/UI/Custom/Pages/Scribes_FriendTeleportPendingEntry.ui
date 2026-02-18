@@ -1,0 +1,33 @@
+Group {
+    Background: #2a3a2a;
+    LayoutMode: Left;
+    Anchor: (Left: 0, Right: 0, Height: 60, Bottom: 2);
+    Padding: (Left: 10, Right: 10);
+
+    Label #RequesterName {
+        Text: "Player Name";
+        FlexWeight: 1;
+        Anchor: (Vertical: 0);
+    }
+
+    Button #AcceptButton {
+        Background: #226622;
+        Anchor: (Width: 90, Height: 40, Vertical: 0);
+
+        Label {
+            Text: "Accept";
+            Anchor: (Left: 0, Right: 0, Vertical: 0);
+        }
+    }
+
+    Button #DenyButton {
+        Background: #662222;
+        Anchor: (Width: 80, Height: 40, Vertical: 0);
+
+        Label {
+            Text: "Ignore";
+            Anchor: (Left: 0, Right: 0, Vertical: 0);
+        }
+    }
+}
+

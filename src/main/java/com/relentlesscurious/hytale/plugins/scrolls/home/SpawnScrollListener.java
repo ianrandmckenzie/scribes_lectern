@@ -1,5 +1,6 @@
 package com.relentlesscurious.hytale.plugins.scrolls.home;
 
+import com.relentlesscurious.hytale.plugins.scrolls.util.ReflectPlayer;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -495,22 +496,7 @@ public class SpawnScrollListener {
   }
 
   private String resolvePlayerName(Player player) {
-    try {
-      return String.valueOf(player.getClass().getMethod("getName").invoke(player));
-    } catch (Exception ignored) {
-      // fallback below
-    }
-
-    try {
-      Object ref = player.getReference();
-      if (ref != null) {
-        return String.valueOf(ref.getClass().getMethod("getUsername").invoke(ref));
-      }
-    } catch (Exception ignored) {
-      // fallback below
-    }
-
-    return String.valueOf(player);
+    return ReflectPlayer.resolveName(player);
   }
 
   private PlayerWorldData resolvePlayerWorldData(Player player, World world) {

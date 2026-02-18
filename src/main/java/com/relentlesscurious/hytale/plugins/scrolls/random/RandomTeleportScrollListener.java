@@ -1,5 +1,6 @@
 package com.relentlesscurious.hytale.plugins.scrolls.random;
 
+import com.relentlesscurious.hytale.plugins.scrolls.util.ReflectPlayer;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -451,61 +452,48 @@ public class RandomTeleportScrollListener {
   }
 
   private Player resolvePlayerFromRef(PlayerRef playerRef) {
-    if (playerRef == null) {
-      return null;
-    }
     try {
-      Ref<EntityStore> ref = playerRef.getReference();
-      if (ref == null) {
-        return null;
-      }
-      Store<EntityStore> store = (Store<EntityStore>) ref.getStore();
       EntityModule module = resolveEntityModule();
       if (module == null) {
         return null;
       }
-      ComponentType<EntityStore, Player> playerType = (ComponentType<EntityStore, Player>) module
-          .getPlayerComponentType();
+
+      var ref = playerRef.getReference();
+      if (ref == null) {
+        return null;
+      }
+
+      Store<EntityStore> store = (Store<EntityStore>) ref.getStore();
+      ComponentType<EntityStore, Player> playerType = java.util.Objects
+          .requireNonNull((ComponentType<EntityStore, Player>) module.getPlayerComponentType());
+
       return store.getComponent(ref, playerType);
-    } catch (Exception e) {
-      logger.atWarning().withCause(e).log("Failed to resolve Player from PlayerRef.");
+    } catch (Exception ex) {
+      logger.atWarning().withCause(ex).log("Failed to resolve Player from PlayerRef.");
       return null;
     }
   }
 
   private UUID resolvePlayerUuid(Player player) {
-    if (player == null) {
-      return UUID.randomUUID();
-    }
     try {
       return (UUID) player.getClass().getMethod("getUuid").invoke(player);
     } catch (Exception ignored) {
+      // fallback below
     }
+
     try {
-      Ref<EntityStore> ref = player.getReference();
+      Object ref = player.getReference();
       if (ref != null) {
         return (UUID) ref.getClass().getMethod("getUuid").invoke(ref);
       }
-    } catch (Exception ignored) {
+    } catch (Exception ex) {
+      logger.atWarning().withCause(ex).log("Failed to resolve player UUID; using random UUID.");
     }
+
     return UUID.randomUUID();
   }
 
   private String resolvePlayerName(Player player) {
-    if (player == null) {
-      return "Unknown";
-    }
-    try {
-      return String.valueOf(player.getClass().getMethod("getName").invoke(player));
-    } catch (Exception ignored) {
-    }
-    try {
-      Ref<EntityStore> ref = player.getReference();
-      if (ref != null) {
-        return String.valueOf(ref.getClass().getMethod("getUsername").invoke(ref));
-      }
-    } catch (Exception ignored) {
-    }
-    return resolvePlayerUuid(player).toString();
+    return ReflectPlayer.resolveName(player);
   }
 }

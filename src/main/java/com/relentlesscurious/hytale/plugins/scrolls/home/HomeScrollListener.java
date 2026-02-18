@@ -26,6 +26,7 @@ import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.spawn.ISpawnProvider;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.relentlesscurious.hytale.plugins.scrolls.util.ReflectPlayer;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
@@ -516,22 +517,7 @@ public class HomeScrollListener {
   }
 
   private String resolvePlayerName(Player player) {
-    try {
-      return String.valueOf(player.getClass().getMethod("getName").invoke(player));
-    } catch (Exception ignored) {
-      // fallback below
-    }
-
-    try {
-      Object ref = player.getReference();
-      if (ref != null) {
-        return String.valueOf(ref.getClass().getMethod("getUsername").invoke(ref));
-      }
-    } catch (Exception ignored) {
-      // fallback below
-    }
-
-    return String.valueOf(player);
+    return ReflectPlayer.resolveName(player);
   }
 
   private PlayerWorldData resolvePlayerWorldData(Player player, World world) {

@@ -1,0 +1,26 @@
+{
+  "Interactions": [
+    {
+      "Type": "Charging",
+      "FailOnDamage": true,
+      "Effects": {
+        "ItemAnimationId": "Read",
+        "ClearAnimationOnFinish": true,
+        "ClearSoundEventOnFinish": true
+      },
+      "HorizontalSpeedMultiplier": 0.4,
+      "Next": {
+        "1.5": {
+          "Type": "Serial",
+          "Interactions": [
+            {
+              "Type": "ApplyEffect",
+              "EffectId": "Potion_Stamina_Instant_Lesser"
+            },
+            "Scroll_Friend_Teleport_Use"
+          ]
+        }
+      }
+    }
+  ]
+}

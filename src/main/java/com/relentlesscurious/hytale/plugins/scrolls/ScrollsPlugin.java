@@ -6,6 +6,8 @@ import com.hypixel.hytale.server.core.util.Config;
 import com.relentlesscurious.hytale.plugins.scrolls.config.RandomTeleportConfig;
 import com.relentlesscurious.hytale.plugins.scrolls.data.HomeStorage;
 import com.relentlesscurious.hytale.plugins.scrolls.random.RandomTeleportScrollListener;
+import com.relentlesscurious.hytale.plugins.scrolls.teleport.FriendTeleportService;
+import com.relentlesscurious.hytale.plugins.scrolls.teleport.FriendTeleportScrollListener;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
@@ -24,6 +26,8 @@ public class ScrollsPlugin extends JavaPlugin {
   private final Config<RandomTeleportConfig> randomTeleportConfigStore = withConfig(RandomTeleportConfig.CODEC);
   private RandomTeleportConfig randomTeleportConfig;
   private RandomTeleportScrollListener randomTeleportScrollListener;
+  private final FriendTeleportService friendTeleportService = new FriendTeleportService();
+  private FriendTeleportScrollListener friendTeleportScrollListener;
 
   public ScrollsPlugin(@Nonnull JavaPluginInit init) {
     super(init);
@@ -59,6 +63,8 @@ public class ScrollsPlugin extends JavaPlugin {
 
     randomTeleportScrollListener = new RandomTeleportScrollListener(randomTeleportConfig, getLogger());
 
+    friendTeleportScrollListener = new FriendTeleportScrollListener(friendTeleportService, getLogger());
+
     // Register Event Listeners
     getEventRegistry().registerGlobal(
         com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent.class,
@@ -66,6 +72,7 @@ public class ScrollsPlugin extends JavaPlugin {
           spawnScrollListener.onPlayerMouseButton(event);
           homeScrollListener.onPlayerMouseButton(event);
           randomTeleportScrollListener.onPlayerMouseButton(event);
+          friendTeleportScrollListener.onPlayerMouseButton(event);
         });
 
     getEventRegistry().registerGlobal(
@@ -74,6 +81,7 @@ public class ScrollsPlugin extends JavaPlugin {
           spawnScrollListener.onPlayerInteract(event);
           homeScrollListener.onPlayerInteract(event);
           randomTeleportScrollListener.onPlayerInteract(event);
+          friendTeleportScrollListener.onPlayerInteract(event);
         });
 
     getEventRegistry().registerGlobal(
@@ -81,6 +89,13 @@ public class ScrollsPlugin extends JavaPlugin {
         (java.util.function.Consumer<com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent>) event -> {
           getLogger().atInfo().log("PlayerReadyEvent received for %s", event.getPlayer());
           System.out.println("[Scrolls] PlayerReadyEvent received: " + event.getPlayer());
+          friendTeleportScrollListener.onPlayerReady(event.getPlayer());
+        });
+
+    getEventRegistry().registerGlobal(
+        com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent.class,
+        (java.util.function.Consumer<com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent>) event -> {
+          friendTeleportScrollListener.onPlayerLogout(event.getPlayerRef().getUuid());
         });
 
     // Register Interactions
@@ -126,6 +141,16 @@ public class ScrollsPlugin extends JavaPlugin {
                 entityRef, accessor, playerRef, context) -> {
               randomTeleportScrollListener.handleUse(playerRef, context.getCommandBuffer());
               return randomTeleportScrollListener.buildNoopPage(playerRef);
+            });
+
+    com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction
+        .registerCustomPageSupplier(
+            this,
+            ScrollsPlugin.class,
+            "Scroll_Friend_Teleport_Use",
+            (com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction.CustomPageSupplier) (
+                entityRef, accessor, playerRef, context) -> {
+              return friendTeleportScrollListener.buildFriendTeleportPage(playerRef);
             });
 
     getLogger().atInfo().log("Scroll spawn interaction hook registered.");

@@ -1,7 +1,8 @@
 {
-  "Group": "relentlessCurious",
-  "Name": "Scrolls",
-  "Version": "0.1.1",
+  "Id": "scribes:lectern",
+  "Group": "scribes",
+  "Name": "lectern",
+  "Version": "0.1.2",
   "Description": "Scrolls mod plugin scaffold",
   "ServerVersion": "2026.02.17-255364b8e",
   "Dependencies": {

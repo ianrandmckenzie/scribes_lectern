@@ -9,3 +9,6 @@ items.Scroll_Home.description = Teleports you to your home, set by the Scroll of
 
 items.Scroll_Home_Binding.name = Scroll of Home Binding
 items.Scroll_Home_Binding.description = Use this scroll to set where your Scroll of Home Teleport takes you.
+
+items.Scroll_Friend_Teleport.name = Scroll of Friend Teleport
+items.Scroll_Friend_Teleport.description = Use to open a menu and select a friend to teleport to.

@@ -87,6 +87,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# 6. Asset Deployment (Sync directory to ensure AssetModule picks it up)
+echo "Deploying assets to $SERVER_IP..."
+ssh "$SERVER_USER@$SERVER_IP" "mkdir -p ${REMOTE_PATH}scribes_lectern"
+scp -r src/main/resources/* "$SERVER_USER@$SERVER_IP:${REMOTE_PATH}scribes_lectern/"
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Asset deployment failed!${NC}"
+fi
+
 echo -e "${GREEN}Deployment successful! Restarting server...${NC}"
 bash ../restart_server.sh
 

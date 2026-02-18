@@ -9,3 +9,6 @@ items.Scroll_Home.description = Te teletransporta a tu hogar, configurado por el
 
 items.Scroll_Home_Binding.name = Pergamino de Vinculación al Hogar
 items.Scroll_Home_Binding.description = Usa este pergamino para establecer a dónde te lleva tu Pergamino de Teletransporte al Hogar.
+
+items.Scroll_Friend_Teleport.name = Pergamino de Teletransporte a Amigo
+items.Scroll_Friend_Teleport.description = Úsalo para abrir un menú y seleccionar a un amigo para teletransportarte.

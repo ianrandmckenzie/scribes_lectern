@@ -9,3 +9,5 @@ items.Scroll_Home.description = Vous téléporte à votre domicile, défini par 
 
 items.Scroll_Home_Binding.name = Parchemin de Liaison à la Maison
 items.Scroll_Home_Binding.description = Utilisez ce parchemin pour définir l'endroit où votre Parchemin de Téléportation à la Maison vous emmène.
+items.Scroll_Friend_Teleport.name = Parchemin de téléportation à un ami
+items.Scroll_Friend_Teleport.description = Utilisez-le pour ouvrir un menu et sélectionner un ami vers lequel vous téléporter.
