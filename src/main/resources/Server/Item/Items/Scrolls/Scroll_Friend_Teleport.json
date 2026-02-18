@@ -3,7 +3,7 @@
     "Name": "server.items.Scroll_Friend_Teleport.name",
     "Description": "server.items.Scroll_Friend_Teleport.description"
   },
-  "Icon": "Icons/ItemsGenerated/icon_ScrollRandomTeleport.png",
+  "Icon": "Icons/ItemsGenerated/icon_ScrollFriendTeleport.png",
   "Categories": [
     "Items.Tools"
   ],
@@ -41,7 +41,7 @@
     "CustomModel": "Blocks/Miscellaneous/ScribesScroll.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Miscellaneous/ScrollRandomTeleport.png",
+        "Texture": "Blocks/Miscellaneous/ScrollFriendTeleport.png",
         "Weight": 1
       }
     ]
