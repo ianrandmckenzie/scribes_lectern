@@ -33,16 +33,20 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
+import com.relentlesscurious.hytale.plugins.scrolls.config.FriendTeleportConfig;
+
 public class FriendTeleportScrollListener {
 
   private static final String SCROLL_FRIEND_ITEM_ID = "Scroll_Friend_Teleport";
 
   private final FriendTeleportService friendTeleportService;
+  private final FriendTeleportConfig config;
   private final HytaleLogger logger;
   private final Map<UUID, Player> onlinePlayersTracker = new ConcurrentHashMap<>();
 
-  public FriendTeleportScrollListener(FriendTeleportService friendTeleportService, HytaleLogger logger) {
+  public FriendTeleportScrollListener(FriendTeleportService friendTeleportService, FriendTeleportConfig config, HytaleLogger logger) {
     this.friendTeleportService = friendTeleportService;
+    this.config = config;
     this.logger = logger;
   }
 
@@ -162,16 +166,43 @@ public class FriendTeleportScrollListener {
     Vector3d targetPos = transformComp.getPosition();
     Vector3f targetRot = transformComp.getRotation();
 
+    double chargingTime = config.chargingTime;
+    if (chargingTime > 0) {
+        sender.sendMessage(com.hypixel.hytale.server.core.Message.raw("Friend teleport charging... (" + chargingTime + "s)"));
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep((long) (chargingTime * 1000));
+            } catch (InterruptedException ignored) {}
+        }).thenRun(() -> {
+            targetWorld.execute(() -> {
+                long chunkIndex = com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(targetPos.x, targetPos.z);
+                targetWorld.getChunkAsync(chunkIndex).whenComplete((chunk, err) -> {
+                    targetWorld.execute(() -> {
+                        if (chunk == null || err != null) {
+                            sender.sendMessage(com.hypixel.hytale.server.core.Message.raw("Failed to load destination chunk."));
+                            return;
+                        }
+                        performTeleport(sender, targetWorld, targetPos, targetRot);
+                        sender.sendMessage(com.hypixel.hytale.server.core.Message.raw("Teleporting to " + resolvePlayerName(receiver)));
+                        receiver.sendMessage(com.hypixel.hytale.server.core.Message.raw("Teleporting " + resolvePlayerName(sender) + " to you."));
+                        friendTeleportService.clearRequest(resolvePlayerUuid(receiver), senderUuid);
+                    });
+                });
+            });
+        });
+        return;
+    }
+
     long chunkIndex = com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(targetPos.x, targetPos.z);
     targetWorld.getChunkAsync(chunkIndex).whenComplete((chunk, err) -> {
         targetWorld.execute(() -> {
             if (chunk == null || err != null) {
-                receiver.sendMessage(Message.raw("Failed to load destination chunk."));
+                receiver.sendMessage(com.hypixel.hytale.server.core.Message.raw("Failed to load destination chunk."));
                 return;
             }
             performTeleport(sender, targetWorld, targetPos, targetRot);
-            sender.sendMessage(Message.raw("Teleporting to " + resolvePlayerName(receiver)));
-            receiver.sendMessage(Message.raw("Teleporting " + resolvePlayerName(sender) + " to you."));
+            sender.sendMessage(com.hypixel.hytale.server.core.Message.raw("Teleporting to " + resolvePlayerName(receiver)));
+            receiver.sendMessage(com.hypixel.hytale.server.core.Message.raw("Teleporting " + resolvePlayerName(sender) + " to you."));
             friendTeleportService.clearRequest(resolvePlayerUuid(receiver), senderUuid);
         });
     });

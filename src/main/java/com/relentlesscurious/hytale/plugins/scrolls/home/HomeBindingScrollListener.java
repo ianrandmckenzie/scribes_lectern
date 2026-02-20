@@ -24,12 +24,16 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import java.util.UUID;
 
+import com.relentlesscurious.hytale.plugins.scrolls.config.HomeBindingScrollConfig;
+
 public class HomeBindingScrollListener {
   private final HomeStorage homeStorage;
+  private final HomeBindingScrollConfig config;
   private final HytaleLogger logger;
 
-  public HomeBindingScrollListener(HomeStorage homeStorage, HytaleLogger logger) {
+  public HomeBindingScrollListener(HomeStorage homeStorage, HomeBindingScrollConfig config, HytaleLogger logger) {
     this.homeStorage = homeStorage;
+    this.config = config;
     this.logger = logger;
   }
 
@@ -52,6 +56,25 @@ public class HomeBindingScrollListener {
       return;
     String worldName = player.getWorld().getName();
 
+    double chargingTime = config.chargingTime;
+    if (chargingTime > 0) {
+      player.sendMessage(Message.raw("Charging scroll... (" + chargingTime + "s)"));
+      java.util.concurrent.CompletableFuture.runAsync(() -> {
+        try {
+          Thread.sleep((long) (chargingTime * 1000));
+        } catch (InterruptedException ignored) {}
+      }).thenRun(() -> {
+        player.getWorld().execute(() -> {
+          executeBinding(player, worldName, position, rotation);
+        });
+      });
+      return;
+    }
+
+    executeBinding(player, worldName, position, rotation);
+  }
+
+  private void executeBinding(Player player, String worldName, Vector3d position, Vector3f rotation) {
     StoredLocation storedLocation = new StoredLocation(
         worldName,
         position.x,

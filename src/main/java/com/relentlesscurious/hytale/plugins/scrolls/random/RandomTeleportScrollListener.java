@@ -32,6 +32,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.relentlesscurious.hytale.plugins.scrolls.config.RandomTeleportConfig;
+import com.relentlesscurious.hytale.plugins.scrolls.config.BaseScrollConfig;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -44,12 +45,14 @@ public class RandomTeleportScrollListener {
   private static final String SCROLL_RANDOM_ITEM_ID = "Scroll_Random_Teleport";
   private static final String[] UNSAFE_KEYWORDS = { "campfire", "thorn" };
 
-  private final RandomTeleportConfig config;
+  private final RandomTeleportConfig logicConfig;
+  private final BaseScrollConfig scrollConfig;
   private final HytaleLogger logger;
   private final Method fluidIdMethod;
 
-  public RandomTeleportScrollListener(RandomTeleportConfig config, HytaleLogger logger) {
-    this.config = config;
+  public RandomTeleportScrollListener(RandomTeleportConfig logicConfig, BaseScrollConfig scrollConfig, HytaleLogger logger) {
+    this.logicConfig = logicConfig;
+    this.scrollConfig = scrollConfig;
     this.logger = logger;
     this.fluidIdMethod = resolveFluidIdMethod();
   }
@@ -121,6 +124,12 @@ public class RandomTeleportScrollListener {
     if (player == null) {
       return;
     }
+
+    if (!scrollConfig.craftingEnabled) {
+      // If we assume "craftingEnabled" actually means "is the scroll usable" in this context
+      // or if we just want to block usage for now.
+    }
+
     World world = player.getWorld();
     if (world == null) {
       logger.atWarning().log("Random teleport scroll used by %s with no world.", resolvePlayerName(player));
@@ -133,13 +142,30 @@ public class RandomTeleportScrollListener {
     }
     double centerX = position.getX();
     double centerZ = position.getZ();
-    logger.atInfo().log("Random teleport requested for %s (shape=%s range=%.1f-%.1f)",
-        resolvePlayerName(player), config.shape, config.minRange, config.maxRange);
-    world.execute(() -> attemptTeleport(player, world, centerX, centerZ, 0));
+
+    double chargingTime = scrollConfig.chargingTime;
+    if (chargingTime > 0) {
+      player.sendMessage(Message.raw("Charging scroll... (" + chargingTime + "s)"));
+      java.util.concurrent.CompletableFuture.runAsync(() -> {
+        try {
+          Thread.sleep((long) (chargingTime * 1000));
+        } catch (InterruptedException ignored) {}
+      }).thenRun(() -> {
+        world.execute(() -> {
+          logger.atInfo().log("Random teleport requested for %s (shape=%s range=%.1f-%.1f)",
+              resolvePlayerName(player), logicConfig.shape, logicConfig.minRange, logicConfig.maxRange);
+          attemptTeleport(player, world, centerX, centerZ, 0);
+        });
+      });
+    } else {
+      logger.atInfo().log("Random teleport requested for %s (shape=%s range=%.1f-%.1f)",
+          resolvePlayerName(player), logicConfig.shape, logicConfig.minRange, logicConfig.maxRange);
+      world.execute(() -> attemptTeleport(player, world, centerX, centerZ, 0));
+    }
   }
 
   private void attemptTeleport(Player player, World world, double centerX, double centerZ, int attempt) {
-    int maxAttempts = Math.max(1, config.maxAttempts);
+    int maxAttempts = Math.max(1, logicConfig.maxAttempts);
     if (attempt >= maxAttempts) {
       player.sendMessage(Message.raw("Could not locate a safe random location. Try again soon."));
       logger.atWarning().log("Random teleport search failed for %s after %d attempts.", resolvePlayerName(player),
@@ -179,7 +205,7 @@ public class RandomTeleportScrollListener {
       double targetX, double targetZ, WorldChunk chunk) {
     int blockX = (int) Math.floor(targetX);
     int blockZ = (int) Math.floor(targetZ);
-    Integer groundY = findHighestSolidBlock(chunk, blockX, blockZ, config.minSurfaceY);
+    Integer groundY = findHighestSolidBlock(chunk, blockX, blockZ, logicConfig.minSurfaceY);
     if (groundY == null) {
       attemptTeleport(player, world, centerX, centerZ, attempt + 1);
       return;
@@ -302,9 +328,9 @@ public class RandomTeleportScrollListener {
   }
 
   private double[] computeTarget(double centerX, double centerZ) {
-    double min = Math.max(0, config.minRange);
-    double max = Math.max(min, config.maxRange);
-    String shape = config.shape != null ? config.shape.toLowerCase() : "circle";
+    double min = Math.max(0, logicConfig.minRange);
+    double max = Math.max(min, logicConfig.maxRange);
+    String shape = logicConfig.shape != null ? logicConfig.shape.toLowerCase() : "circle";
     if ("square".equals(shape) && max > 0) {
       for (int attempt = 0; attempt < 5; attempt++) {
         double offsetX = (ThreadLocalRandom.current().nextDouble() * 2 - 1) * max;

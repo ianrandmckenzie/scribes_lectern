@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.data.PlayerRespawnPointData;
 import com.hypixel.hytale.server.core.entity.entities.player.data.PlayerWorldData;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.event.events.player.PlayerInteractEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -31,15 +32,19 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
 
+import com.relentlesscurious.hytale.plugins.scrolls.config.SpawnScrollConfig;
+
 public class SpawnScrollListener {
 
   private static final String SCROLL_SPAWN_ITEM_ID = "Scroll_Spawn";
 
   private final HomeTeleportService homeTeleportService;
+  private final SpawnScrollConfig config;
   private final HytaleLogger logger;
 
-  public SpawnScrollListener(HomeTeleportService homeTeleportService, HytaleLogger logger) {
+  public SpawnScrollListener(HomeTeleportService homeTeleportService, SpawnScrollConfig config, HytaleLogger logger) {
     this.homeTeleportService = homeTeleportService;
+    this.config = config;
     this.logger = logger;
   }
 
@@ -246,6 +251,29 @@ public class SpawnScrollListener {
     World world = player.getWorld();
     if (world == null) {
       logger.atWarning().log("Spawn scroll used by %s but player has no world.", playerName);
+      return;
+    }
+
+    double chargingTime = config.chargingTime;
+    if (chargingTime > 0) {
+      player.sendMessage(Message.raw("Charging scroll... (" + chargingTime + "s)"));
+      java.util.concurrent.CompletableFuture.runAsync(() -> {
+        try {
+          Thread.sleep((long) (chargingTime * 1000));
+        } catch (InterruptedException ignored) {}
+      }).thenRun(() -> {
+        world.execute(() -> {
+          HomeLocation spawnLocation = resolveSpawnLocation(player, world);
+          HomeTeleportResult result = homeTeleportService.resolveTarget(
+              new HomeTeleportRequest(playerName, null, spawnLocation));
+
+          if (result.targetType() == HomeTeleportTargetType.NONE || result.targetLocation() == null) {
+            logger.atWarning().log("Home scroll could not resolve target for %s.", playerName);
+            return;
+          }
+          queueTeleport(player, world, result.targetLocation(), commandBuffer);
+        });
+      });
       return;
     }
 

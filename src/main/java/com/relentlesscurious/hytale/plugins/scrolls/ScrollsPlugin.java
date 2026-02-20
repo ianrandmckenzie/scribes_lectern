@@ -3,8 +3,10 @@ package com.relentlesscurious.hytale.plugins.scrolls;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
-import com.relentlesscurious.hytale.plugins.scrolls.config.RandomTeleportConfig;
+import com.relentlesscurious.hytale.plugins.scrolls.config.MainConfig;
+import com.relentlesscurious.hytale.plugins.scrolls.config.ConfigManager;
 import com.relentlesscurious.hytale.plugins.scrolls.data.HomeStorage;
+import com.relentlesscurious.hytale.plugins.scrolls.util.RecipeOverrideUtil;
 import com.relentlesscurious.hytale.plugins.scrolls.random.RandomTeleportScrollListener;
 import com.relentlesscurious.hytale.plugins.scrolls.teleport.FriendTeleportService;
 import com.relentlesscurious.hytale.plugins.scrolls.teleport.FriendTeleportScrollListener;
@@ -23,8 +25,10 @@ public class ScrollsPlugin extends JavaPlugin {
   private com.relentlesscurious.hytale.plugins.scrolls.home.HomeScrollListener homeScrollListener;
   private com.relentlesscurious.hytale.plugins.scrolls.home.HomeBindingScrollListener homeBindingScrollListener;
   private HomeStorage homeStorage;
-  private final Config<RandomTeleportConfig> randomTeleportConfigStore = withConfig(RandomTeleportConfig.CODEC);
-  private RandomTeleportConfig randomTeleportConfig;
+  private ConfigManager configManager;
+  private MainConfig config;
+  private boolean recipesApplied = false;
+
   private RandomTeleportScrollListener randomTeleportScrollListener;
   private final FriendTeleportService friendTeleportService = new FriendTeleportService();
   private FriendTeleportScrollListener friendTeleportScrollListener;
@@ -40,8 +44,9 @@ public class ScrollsPlugin extends JavaPlugin {
 
     // Initialize storage and config
     homeStorage = new HomeStorage(Path.of("data"));
-    randomTeleportConfig = randomTeleportConfigStore.get();
-    randomTeleportConfigStore.save();
+    configManager = new ConfigManager(this);
+    configManager.loadConfig();
+    config = configManager.getConfig();
 
     // Register commands
     // SetHomeCommand replaced by Scroll of Home Binding
@@ -51,19 +56,22 @@ public class ScrollsPlugin extends JavaPlugin {
     // Initialize Listeners
     spawnScrollListener = new com.relentlesscurious.hytale.plugins.scrolls.home.SpawnScrollListener(
         homeTeleportService,
+        config.spawnScroll,
         getLogger());
 
     homeScrollListener = new com.relentlesscurious.hytale.plugins.scrolls.home.HomeScrollListener(
         homeStorage,
+        config.homeScroll,
         getLogger());
 
     homeBindingScrollListener = new com.relentlesscurious.hytale.plugins.scrolls.home.HomeBindingScrollListener(
         homeStorage,
+        config.homeBindingScroll,
         getLogger());
 
-    randomTeleportScrollListener = new RandomTeleportScrollListener(randomTeleportConfig, getLogger());
+    randomTeleportScrollListener = new RandomTeleportScrollListener(config.randomTeleportScroll, config.randomTeleportScroll, getLogger());
 
-    friendTeleportScrollListener = new FriendTeleportScrollListener(friendTeleportService, getLogger());
+    friendTeleportScrollListener = new FriendTeleportScrollListener(friendTeleportService, config.friendTeleportScroll, getLogger());
 
     // Register Event Listeners
     getEventRegistry().registerGlobal(
@@ -87,6 +95,11 @@ public class ScrollsPlugin extends JavaPlugin {
     getEventRegistry().registerGlobal(
         com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent.class,
         (java.util.function.Consumer<com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent>) event -> {
+          if (!recipesApplied) {
+            getLogger().atInfo().log("First player ready. Applying recipe overrides.");
+            applyRecipeOverrides();
+            recipesApplied = true;
+          }
           getLogger().atInfo().log("PlayerReadyEvent received for %s", event.getPlayer());
           System.out.println("[Scrolls] PlayerReadyEvent received: " + event.getPlayer());
           friendTeleportScrollListener.onPlayerReady(event.getPlayer());
@@ -161,12 +174,39 @@ public class ScrollsPlugin extends JavaPlugin {
     getLogger().atInfo().log("Scrolls event listeners registered.");
     System.out.println("[Scrolls] Event listeners registered.");
     getLogger().atInfo().log("Home teleport baseline initialized and listener registered.");
+
     getLogger().atInfo().log("Scrolls plugin setup complete.");
+  }
+
+  private void applyRecipeOverrides() {
+    getLogger().atInfo().log("Starting applyRecipeOverrides()");
+    applySingleRecipeOverride("scribes:Scroll_Spawn", config.spawnScroll);
+    applySingleRecipeOverride("scribes:Scroll_Home", config.homeScroll);
+    applySingleRecipeOverride("scribes:Scroll_Home_Binding", config.homeBindingScroll);
+    applySingleRecipeOverride("scribes:Scroll_Random_Teleport", config.randomTeleportScroll);
+    applySingleRecipeOverride("scribes:Scroll_Friend_Teleport", config.friendTeleportScroll);
+  }
+
+  private void applySingleRecipeOverride(String itemId, com.relentlesscurious.hytale.plugins.scrolls.config.BaseScrollConfig config) {
+    getLogger().atInfo().log("Applying recipe override for: %s", itemId);
+    if (!config.craftingEnabled) {
+      RecipeOverrideUtil.disableCrafting(itemId, getLogger());
+    } else {
+      RecipeOverrideUtil.applyRecipe(itemId, config, getLogger());
+    }
   }
 
   @Override
   protected void start() {
     getLogger().atInfo().log("Scrolls start() called.");
+    // Delay applying recipes to ensure Assets are loaded
+    java.util.concurrent.CompletableFuture.delayedExecutor(5, java.util.concurrent.TimeUnit.SECONDS).execute(() -> {
+      if (!recipesApplied) {
+        getLogger().atInfo().log("Applying recipe overrides via start-up delay.");
+        applyRecipeOverrides();
+        recipesApplied = true;
+      }
+    });
   }
 
   @Override

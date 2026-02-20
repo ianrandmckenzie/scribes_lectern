@@ -12,6 +12,7 @@ import com.hypixel.hytale.protocol.MouseButtonState;
 import com.hypixel.hytale.protocol.MouseButtonType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.data.PlayerRespawnPointData;
 import com.hypixel.hytale.server.core.entity.entities.player.data.PlayerWorldData;
 import com.hypixel.hytale.server.core.event.events.player.PlayerInteractEvent;
@@ -34,15 +35,19 @@ import com.relentlesscurious.hytale.plugins.scrolls.data.HomeStorage;
 import com.relentlesscurious.hytale.plugins.scrolls.data.PlayerHomeData;
 import com.relentlesscurious.hytale.plugins.scrolls.data.StoredLocation;
 
+import com.relentlesscurious.hytale.plugins.scrolls.config.HomeScrollConfig;
+
 public class HomeScrollListener {
 
   private static final String SCROLL_HOME_ITEM_ID = "Scroll_Home";
 
   private final HomeStorage homeStorage;
+  private final HomeScrollConfig config;
   private final HytaleLogger logger;
 
-  public HomeScrollListener(HomeStorage homeStorage, HytaleLogger logger) {
+  public HomeScrollListener(HomeStorage homeStorage, HomeScrollConfig config, HytaleLogger logger) {
     this.homeStorage = homeStorage;
+    this.config = config;
     this.logger = logger;
   }
 
@@ -246,6 +251,31 @@ public class HomeScrollListener {
     World world = player.getWorld();
     if (world == null) {
       logger.atWarning().log("Home scroll used by %s but player has no world.", playerName);
+      return;
+    }
+
+    double chargingTime = config.chargingTime;
+    if (chargingTime > 0) {
+      player.sendMessage(Message.raw("Charging scroll... (" + chargingTime + "s)"));
+      java.util.concurrent.CompletableFuture.runAsync(() -> {
+        try {
+          Thread.sleep((long) (chargingTime * 1000));
+        } catch (InterruptedException ignored) {}
+      }).thenRun(() -> {
+        world.execute(() -> {
+          java.util.UUID uuid = resolvePlayerUuid(player);
+          PlayerHomeData homeData = homeStorage.getPlayerHomeData(uuid);
+          StoredLocation home = homeData.getHome("home");
+
+          if (home == null) {
+            handleVanillaFallback(player, world, commandBuffer);
+            return;
+          }
+
+          HomeLocation target = new HomeLocation(home.getWorldName(), home.getX(), home.getY(), home.getZ());
+          queueTeleport(player, world, target, commandBuffer);
+        });
+      });
       return;
     }
 
