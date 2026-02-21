@@ -16,7 +16,7 @@ Group {
 
         Label {
             Text: "Accept";
-            Style: (TextColor: #aaFFaa, HorizontalAlignment: Center, VerticalAlignment: Center);
+            Style: (TextColor: #00CC00, HorizontalAlignment: Center, VerticalAlignment: Center);
             Anchor: (Left: 0, Right: 0, Vertical: 0);
         }
     }

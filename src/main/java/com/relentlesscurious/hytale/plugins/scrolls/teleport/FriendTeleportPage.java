@@ -21,19 +21,24 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Map;
 
+import com.relentlesscurious.hytale.plugins.scrolls.config.FriendTeleportConfig;
+
 public class FriendTeleportPage extends InteractiveCustomUIPage<FriendTeleportPage.PageData> {
 
     private final FriendTeleportService service;
     private final Map<UUID, Player> onlinePlayers;
     private final FriendTeleportScrollListener listener;
+    private final FriendTeleportConfig config;
 
     public FriendTeleportPage(PlayerRef playerRef, FriendTeleportService service,
                               Map<UUID, Player> onlinePlayers,
-                              FriendTeleportScrollListener listener) {
+                              FriendTeleportScrollListener listener,
+                              FriendTeleportConfig config) {
         super(playerRef, CustomPageLifetime.CanDismiss, PageData.CODEC);
         this.service = service;
         this.onlinePlayers = onlinePlayers;
         this.listener = listener;
+        this.config = config;
     }
 
     @Override
@@ -81,23 +86,25 @@ public class FriendTeleportPage extends InteractiveCustomUIPage<FriendTeleportPa
             count++;
         }
 
-        // 1b. Fake pending requests for UI testing
-        for (int i = 0; i < 3; i++) {
-            String selector = "#PlayerCards[" + count + "]";
-            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportPendingEntry.ui");
-            commandBuilder.set(selector + " #RequesterName.Text", "Pending Request " + (i + 1));
+        if (config.debugUi) {
+            // 1b. Fake pending requests for UI testing
+            for (int i = 0; i < 3; i++) {
+                String selector = "#PlayerCards[" + count + "]";
+                commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportPendingEntry.ui");
+                commandBuilder.set(selector + " #RequesterName.Text", "Pending Request " + (i + 1));
 
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                selector + " #AcceptButton",
-                new EventData().append("Action", "Accept").append("TargetId", UUID.randomUUID().toString())
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                selector + " #DenyButton",
-                new EventData().append("Action", "Deny").append("TargetId", UUID.randomUUID().toString())
-            );
-            count++;
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    selector + " #AcceptButton",
+                    new EventData().append("Action", "Accept").append("TargetId", UUID.randomUUID().toString())
+                );
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    selector + " #DenyButton",
+                    new EventData().append("Action", "Deny").append("TargetId", UUID.randomUUID().toString())
+                );
+                count++;
+            }
         }
 
         // 2. Online players (to request to)
@@ -120,12 +127,14 @@ public class FriendTeleportPage extends InteractiveCustomUIPage<FriendTeleportPa
             count++;
         }
 
-        // 3. Fake cards for UI testing (to ensure scrolling works)
-        for (int i = 0; i < 15; i++) {
-            String selector = "#PlayerCards[" + count + "]";
-            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportEntry.ui");
-            commandBuilder.set(selector + " #PlayerName.Text", "Fake Player " + (i + 1));
-            count++;
+        if (config.debugUi) {
+            // 3. Fake cards for UI testing (to ensure scrolling works)
+            for (int i = 0; i < 15; i++) {
+                String selector = "#PlayerCards[" + count + "]";
+                commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportEntry.ui");
+                commandBuilder.set(selector + " #PlayerName.Text", "Fake Player " + (i + 1));
+                count++;
+            }
         }
     }
 

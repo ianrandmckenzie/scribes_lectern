@@ -108,7 +108,7 @@ public class FriendTeleportScrollListener {
   public FriendTeleportPage buildFriendTeleportPage(PlayerRef playerRef) {
     if (playerRef == null) return null;
     logger.atInfo().log("Building FriendTeleportPage for %s", playerRef);
-    return new FriendTeleportPage(playerRef, friendTeleportService, onlinePlayersTracker, this);
+    return new FriendTeleportPage(playerRef, friendTeleportService, onlinePlayersTracker, this, config);
   }
 
   private void showFriendMenu(Player player) {
@@ -124,7 +124,7 @@ public class FriendTeleportScrollListener {
     Store<EntityStore> store = (Store<EntityStore>) ref.getStore();
     if (store == null) return;
 
-    FriendTeleportPage page = new FriendTeleportPage(playerRef, friendTeleportService, onlinePlayersTracker, this);
+    FriendTeleportPage page = new FriendTeleportPage(playerRef, friendTeleportService, onlinePlayersTracker, this, config);
     try {
         player.getPageManager().openCustomPage(ref, store, page);
     } catch (Throwable t) {

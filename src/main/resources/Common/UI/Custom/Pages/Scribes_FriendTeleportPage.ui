@@ -4,24 +4,24 @@ Group {
 
     Group {
         Background: (TexturePath: "scribe_scrollbg.png");
-        Anchor: (Width: 500, Height: 400);
+        Anchor: (Width: 600, Height: 480);
 
         Group #Title {
-            Anchor: (Left: 0, Right: 0, Top: 0, Height: 60, Vertical: 50);
+            Anchor: (Left: 0, Right: 0, Top: 10, Height: 60, Vertical: 50);
             Label {
-                Text: "Request to Teleport";
+                Text: "Teleport Requests";
                 Anchor: (Left: 20, Top: 15, Bottom: 0);
                 Style: (HorizontalAlignment: Center, TextColor: #000000);
             }
         }
 
         Group #Content {
-            Anchor: (Top: 90, Left: 0, Right: 0, Bottom: 100);
+            Anchor: (Top: 110, Left: 0, Right: 0, Bottom: 120);
 
             Group #PlayerList {
                 LayoutMode: TopScrolling;
                 FlexWeight: 1;
-                Padding: (Left: 10, Right: 10, Top: 10);
+                Padding: (Left: 30, Right: 0, Top: 10, Bottom: 10);
 
                 Group #PlayerCards {
                     LayoutMode: Top;
@@ -35,7 +35,8 @@ Group {
             LayoutMode: Center;
 
             Button #CancelButton {
-                Anchor: (Width: 120, Height: 40, Vertical: 10);
+                Anchor: (Width: 120, Height: 40, Vertical: 0);
+                Padding: (Bottom: 10)
 
                 Label {
                     Text: "Cancel";
