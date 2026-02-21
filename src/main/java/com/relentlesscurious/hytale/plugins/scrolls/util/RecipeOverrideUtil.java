@@ -29,11 +29,11 @@ public class RecipeOverrideUtil {
     Item item = Item.getAssetMap().getAsset(itemId);
     if (item == null) {
       logger.atWarning().log("Could not find Item asset for %s to apply recipe overrides. Trying alternative patterns...", itemId);
-      
+
       // Try alternatives if the namespaced path fails
       String shortName = itemId.contains("/") ? itemId.substring(itemId.lastIndexOf("/") + 1) : itemId;
       if (shortName.contains(":")) shortName = shortName.substring(shortName.lastIndexOf(":") + 1);
-      
+
       String[] alternatives = {
           shortName,
           "scribes:" + shortName,
@@ -43,7 +43,7 @@ public class RecipeOverrideUtil {
           shortName.toLowerCase(),
           "scribes:" + shortName.toLowerCase()
       };
-      
+
       for (String alt : alternatives) {
           item = Item.getAssetMap().getAsset(alt);
           if (item != null) {

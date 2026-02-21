@@ -1,19 +1,11 @@
 Button #ActionButton {
-    Background: (TexturePath: "scribe_button.png", Border: 10);
     LayoutMode: Left;
-    Anchor: (Left: 0, Right: 0, Height: 50);
-    Padding: (Left: 10, Right: 10, Top: 2, Bottom: 2);
+    Anchor: (Width: 340, Height: 50);
+    Padding: (Left: 50, Right: 50, Top: 2, Bottom: 2);
 
     Label #PlayerName {
         Text: "Player Name";
         FlexWeight: 1;
-        Anchor: (Vertical: 0);
-    }
-
-    Label {
-        Text: "Send Request";
-        Style: (TextColor: #88dd88);
-        Anchor: (Vertical: 0);
+        Style: (TextColor: #333333, HorizontalAlignment: Center, VerticalAlignment: Center);
     }
 }
-

@@ -1,34 +1,33 @@
 Group {
-    Background: #2a3a2a;
     LayoutMode: Left;
-    Anchor: (Left: 0, Right: 0, Height: 60);
-    Padding: (Left: 10, Right: 10, Top: 2, Bottom: 2);
+    Anchor: (Left: 90, Right: 70, Height: 60);
+    Padding: (Left: 10, Right: 10, Top: 10, Bottom: 2);
 
     Label #RequesterName {
         Text: "Player Name";
         FlexWeight: 1;
+        Style: (TextColor: #333333, VerticalAlignment: Center);
         Anchor: (Vertical: 0);
     }
 
     Button #AcceptButton {
         Background: (TexturePath: "scribe_button.png", Border: 10);
-        Anchor: (Width: 90, Height: 40, Vertical: 0);
-        Padding: (Right: 5);
+        Anchor: (Width: 120, Height: 40, Vertical: 0);
 
         Label {
             Text: "Accept";
-            Style: (TextColor: #00FF00);
+            Style: (TextColor: #aaFFaa, HorizontalAlignment: Center, VerticalAlignment: Center);
             Anchor: (Left: 0, Right: 0, Vertical: 0);
         }
     }
 
     Button #DenyButton {
         Background: (TexturePath: "scribe_button.png", Border: 10);
-        Anchor: (Width: 80, Height: 40, Vertical: 0);
+        Anchor: (Width: 120, Height: 120, Vertical: 0);
 
         Label {
             Text: "Ignore";
-            Style: (TextColor: #FF0000);
+            Style: (TextColor: #FF0000, HorizontalAlignment: Center, VerticalAlignment: Center);
             Anchor: (Left: 0, Right: 0, Vertical: 0);
         }
     }
