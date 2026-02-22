@@ -35,8 +35,8 @@ Group {
             LayoutMode: Center;
 
             Button #CancelButton {
-                Anchor: (Width: 120, Height: 40, Vertical: 0);
-                Padding: (Bottom: 10)
+                Anchor: (Width: 200, Height: 40, Vertical: -15);
+                Padding: (Bottom: 10, Top: 10);
 
                 Label {
                     Text: "Cancel";

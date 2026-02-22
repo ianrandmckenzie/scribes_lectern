@@ -64,76 +64,92 @@ public class FriendTeleportPage extends InteractiveCustomUIPage<FriendTeleportPa
         // 1. Pending requests
         List<FriendTeleportService.TeleportRequest> pending = service.getRequestsFor(selfId);
         int count = 0;
-        for (FriendTeleportService.TeleportRequest req : pending) {
-            String selector = "#PlayerCards[" + count + "]";
-            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportPendingEntry.ui");
-            commandBuilder.set(selector + " #RequesterName.Text", req.senderName());
 
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                selector + " #AcceptButton",
-                new EventData()
-                    .append("Action", "Accept")
-                    .append("TargetId", req.from().toString())
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                selector + " #DenyButton",
-                new EventData()
-                    .append("Action", "Deny")
-                    .append("TargetId", req.from().toString())
-            );
+        // --- Pending Requests Section ---
+        boolean hasPending = !pending.isEmpty() || config.debugUi;
+        if (hasPending) {
+            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportHeader.ui");
+            commandBuilder.set("#PlayerCards[" + count + "] #HeaderText.Text", "Pending Requests");
             count++;
-        }
 
-        if (config.debugUi) {
-            // 1b. Fake pending requests for UI testing
-            for (int i = 0; i < 3; i++) {
+            for (FriendTeleportService.TeleportRequest req : pending) {
                 String selector = "#PlayerCards[" + count + "]";
                 commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportPendingEntry.ui");
-                commandBuilder.set(selector + " #RequesterName.Text", "Pending Request " + (i + 1));
+                commandBuilder.set(selector + " #RequesterName.Text", req.senderName());
 
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     selector + " #AcceptButton",
-                    new EventData().append("Action", "Accept").append("TargetId", UUID.randomUUID().toString())
+                    new EventData()
+                        .append("Action", "Accept")
+                        .append("TargetId", req.from().toString())
                 );
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     selector + " #DenyButton",
-                    new EventData().append("Action", "Deny").append("TargetId", UUID.randomUUID().toString())
+                    new EventData()
+                        .append("Action", "Deny")
+                        .append("TargetId", req.from().toString())
                 );
                 count++;
             }
+
+            if (config.debugUi) {
+                // 1b. Fake pending requests for UI testing
+                for (int i = 0; i < 3; i++) {
+                    String selector = "#PlayerCards[" + count + "]";
+                    commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportPendingEntry.ui");
+                    commandBuilder.set(selector + " #RequesterName.Text", "Pending Request " + (i + 1));
+
+                    eventBuilder.addEventBinding(
+                        CustomUIEventBindingType.Activating,
+                        selector + " #AcceptButton",
+                        new EventData().append("Action", "Accept").append("TargetId", UUID.randomUUID().toString())
+                    );
+                    eventBuilder.addEventBinding(
+                        CustomUIEventBindingType.Activating,
+                        selector + " #DenyButton",
+                        new EventData().append("Action", "Deny").append("TargetId", UUID.randomUUID().toString())
+                    );
+                    count++;
+                }
+            }
         }
 
-        // 2. Online players (to request to)
-        for (Player p : onlinePlayers.values()) {
-            UUID pId = listener.resolvePlayerUuid(p);
-            if (pId == null || pId.equals(selfId)) continue;
-
-            String selector = "#PlayerCards[" + count + "]";
-            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportEntry.ui");
-            commandBuilder.set(selector + " #PlayerName.Text", listener.resolvePlayerName(p));
-
-            // The entry root IS the Button (#ActionButton), so bind directly to the index selector
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                selector,
-                new EventData()
-                    .append("Action", "Request")
-                    .append("TargetId", pId.toString())
-            );
+        // --- Online Players Section ---
+        boolean hasOnline = !onlinePlayers.isEmpty() || config.debugUi;
+        if (hasOnline) {
+            commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportHeader.ui");
+            commandBuilder.set("#PlayerCards[" + count + "] #HeaderText.Text", "Send Request");
             count++;
-        }
 
-        if (config.debugUi) {
-            // 3. Fake cards for UI testing (to ensure scrolling works)
-            for (int i = 0; i < 15; i++) {
+            for (Player p : onlinePlayers.values()) {
+                UUID pId = listener.resolvePlayerUuid(p);
+                if (pId == null || pId.equals(selfId)) continue;
+
                 String selector = "#PlayerCards[" + count + "]";
                 commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportEntry.ui");
-                commandBuilder.set(selector + " #PlayerName.Text", "Fake Player " + (i + 1));
+                commandBuilder.set(selector + " #PlayerName.Text", listener.resolvePlayerName(p));
+
+                // The entry root IS the Button (#ActionButton), so bind directly to the index selector
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    selector,
+                    new EventData()
+                        .append("Action", "Request")
+                        .append("TargetId", pId.toString())
+                );
                 count++;
+            }
+
+            if (config.debugUi) {
+                // 3. Fake cards for UI testing (to ensure scrolling works)
+                for (int i = 0; i < 15; i++) {
+                    String selector = "#PlayerCards[" + count + "]";
+                    commandBuilder.append("#PlayerCards", "Pages/Scribes_FriendTeleportEntry.ui");
+                    commandBuilder.set(selector + " #PlayerName.Text", "Fake Player " + (i + 1));
+                    count++;
+                }
             }
         }
     }

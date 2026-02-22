@@ -1,0 +1,10 @@
+Group {
+    Padding: (Top: 15, Bottom: 5, Left: 5);
+    Anchor: (Left: 0, Right: 0, Height: 34);
+
+    Label #HeaderText {
+        Text: "Header Title";
+        Style: (HorizontalAlignment: Center, FontSize: 12, TextColor: #4A3B2F, RenderBold: true, RenderUppercase: true);
+        Anchor: (Vertical: 0);
+    }
+}
