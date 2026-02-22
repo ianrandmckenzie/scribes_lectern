@@ -6,7 +6,7 @@
 
     <groupId>com.relentlesscurious.hytale.plugins</groupId>
     <artifactId>scribes_lectern</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.0</version>
     <name>Scribes' Lectern</name>
     <description>Scrolls mod plugin scaffold for Hytale servers</description>
 

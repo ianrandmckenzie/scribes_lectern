@@ -85,4 +85,4 @@ To build without deploying:
 mvn clean package
 ```
 
-The compiled JAR will be in `target/scribes_lectern-0.1.1-SNAPSHOT.jar`.
+The compiled JAR will be in `target/scribes_lectern-1.0.0-SNAPSHOT.jar`.
